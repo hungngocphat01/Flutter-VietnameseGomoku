@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'chessboard.dart';
-import '../game_processor.dart';
 
 class GameplayRoute extends StatefulWidget {
   const GameplayRoute({Key? key}) : super(key: key);

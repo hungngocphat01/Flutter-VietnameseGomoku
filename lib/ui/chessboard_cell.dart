@@ -1,5 +1,6 @@
-import 'package:five_in_a_row/ui/chessboard.dart';
+import 'package:gomoku/ui/chessboard.dart';
 import 'package:flutter/material.dart';
+import 'package:gomoku/player_enum.dart';
 
 class ChessboardCell extends StatefulWidget {
   final int rowpos;
@@ -28,7 +29,7 @@ class _ChessboardCellState extends State<ChessboardCell> {
       var player = parentCbSt.handleUserClick(widget.rowpos, widget.colpos);
       setState(() {
         // Player 1
-        if (player == false) {
+        if (player == Player.player1) {
           activeIcon = p1Icon;
         } else {
           activeIcon = p2Icon;

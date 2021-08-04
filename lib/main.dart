@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/gameplay_route.dart';
+import 'package:gomoku/ui/gameplay_route.dart';
 
 void main() {
   runApp(

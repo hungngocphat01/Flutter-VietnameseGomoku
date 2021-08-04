@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'chessboard_cell.dart';
+import 'package:gomoku/player_enum.dart';
+import 'package:gomoku/util/turn_messenger.dart';
+import 'package:gomoku/game_processor.dart';
 
 class Chessboard extends StatefulWidget {
   const Chessboard({Key? key}) : super(key: key);
@@ -16,15 +19,24 @@ class Chessboard extends StatefulWidget {
 }
 
 class _ChessboardState extends State<Chessboard> {
-  int rownum = 5;
-  int colnum = 5;
+  late int rownum;
+  late int colnum;
+  late GameProcessor processor;
+  late Player currentPlayer;
 
-  bool currentPlayer = false;
+  _ChessboardState() : super() {
+    rownum = 5;
+    colnum = 5;
+    processor = GameProcessor(rownum: rownum, colnum: colnum);
+    currentPlayer = Player.player1;
+  }
 
-  bool handleUserClick(int col, int row) {
-    debugPrint("Received signal: $col, $row");
-    currentPlayer = !currentPlayer;
-    return !currentPlayer;
+  Player handleUserClick(int row, int col) {
+    currentPlayer = playerNegate(currentPlayer);
+
+    TurnMessenger messenger = processor.handleUserMark(row, col, currentPlayer);
+    // TODO: Process information returned by processor
+    return currentPlayer;
   }
 
   @override
