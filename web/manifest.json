@@ -1,6 +1,6 @@
 {
-    "name": "five_in_a_row",
-    "short_name": "five_in_a_row",
+    "name": "gomoku",
+    "short_name": "gomoku",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
