@@ -22,7 +22,8 @@ The `build` method of `_ChessboardCellState` returns a `GestureDetector`, whose 
 5. The calling `_ChessboardCellState` now knows which player is playing and it should lock its state to prevent further changes, as well as displaying an `O` or `X` mark accordingly to the current player.
 
 6. `_ChessboardState` passes the location of the just clicked cell in the chessboard to `GameProcessor`.
-7. `GameProcessor` should process the incoming information and returns if anyone has won the game.
-8. `_ChessboardState` receives the response from `GameProcessor` and should whether decide to do the following things if the game is finished:
+7. `GameProcessor` should process the incoming information and returns a `TurnMessenger` object.
+8. `_ChessboardState` receives the response from `GameProcessor` and should whether decide to do the following things if the game has finished:
     - Lock the chessboard.
     - Mark the cells.
+    - Show the winner's name.
