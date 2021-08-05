@@ -1,7 +1,11 @@
+Product under development.
+
 # Introduction
-This is a simple Gomoku game (Vietnamese variant - "cờ carô") written in Flutter. Still under development.<br>
+This is a simple Gomoku game (Vietnamese variant - "cờ carô") written in Flutter.
 
 Rule: the winner must have an overline or an unbroken row of five stones that is not blocked at either end (overlines are immune to this rule). <br>
+
+![demo](extra/demo.gif)
 
 I'm not too familiar with design patterns, so I made up this structure without any reference to any design pattern, so don't be surprised if it's too bad.
 ![class-diagram](extra/ClassDiagram.jpg)
