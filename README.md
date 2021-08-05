@@ -7,7 +7,9 @@ Rule: the winner must have an overline or an unbroken row of five stones that is
 
 ![demo](extra/demo.gif)
 
-I'm not too familiar with design patterns, so I made up this structure without any reference to any design pattern, so don't be surprised if it's too bad.
+# Class diagram
+I have a habit of drawing a diagram to keep track where everything are. Fortunately, I have just finished OOP in  uni, so with this project I keep a copy of its class diagram (simplified). <br>
+I'm not too familiar with design patterns, so I made up this structure without any explicit reference to any design pattern, so don't be surprised if it's too bad.
 ![class-diagram](extra/ClassDiagram.jpg)
 
 # Implementation note
