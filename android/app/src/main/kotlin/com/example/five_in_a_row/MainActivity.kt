@@ -1,4 +1,4 @@
-package com.example.gomoku
+package com.hiraki.gomoku
 
 import io.flutter.embedding.android.FlutterActivity
 
