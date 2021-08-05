@@ -23,6 +23,8 @@ class _ChessboardState extends State<Chessboard> {
   late int colnum;
   late GameProcessor processor;
   late Player currentPlayer;
+  late List<Row> boardRows;
+  late BuildContext _context;
 
   _ChessboardState() : super() {
     rownum = 5;
@@ -32,11 +34,30 @@ class _ChessboardState extends State<Chessboard> {
   }
 
   Player handleUserClick(int row, int col) {
+    // Send data to processor
     TurnMessenger messenger = processor.handleUserMark(row, col, currentPlayer);
-    // TODO: Process information returned by processor
+    // If game finished (either player has won)
     if (messenger.gameFinished) {
       debugPrint("Game end");
       debugPrint("Victory: ${messenger.currentPlayer}");
+      // Mark combo cells
+      messenger.markedCells?.forEach((c) {
+        (boardRows[c.item1].children[c.item2] as ChessboardCell)
+            .isMarked
+            .value = true;
+      });
+      // Disable input
+      for (Row row in boardRows) {
+        for (Widget c in row.children) {
+          (c as ChessboardCell).isActive = true;
+        }
+      }
+      // Show a snackbar
+      ScaffoldMessenger.of(_context).showSnackBar(
+        SnackBar(
+          content: Text("$currentPlayer has won."),
+        ),
+      );
     }
     currentPlayer = playerNegate(currentPlayer);
     return messenger.currentPlayer;
@@ -44,28 +65,23 @@ class _ChessboardState extends State<Chessboard> {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     // Construct a grid
-    List<Row> boardRows = [];
+    boardRows = [];
     for (int i = 0; i < rownum; i++) {
       // Construct columns for one row
       List<Widget> rowChildren = [];
       for (int j = 0; j < colnum; j++) {
         rowChildren.add(ChessboardCell(i, j));
       }
-      boardRows.add(Row(children: rowChildren));
+      boardRows.add(Row(
+        children: rowChildren,
+        mainAxisAlignment: MainAxisAlignment.center,
+      ));
     }
     return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () => (boardRows[0].children[0] as ChessboardCell)
-              .isMarked
-              .value = true,
-          child: const Text("test marker"),
-        ),
-        Column(
-          children: boardRows,
-        ),
-      ],
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: boardRows,
     );
   }
 }

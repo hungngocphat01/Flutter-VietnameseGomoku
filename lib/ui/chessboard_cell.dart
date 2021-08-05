@@ -6,6 +6,7 @@ class ChessboardCell extends StatefulWidget {
   final int rowpos;
   final int colpos;
   var isMarked = ValueNotifier<bool>(false);
+  bool isActive = false;
 
   ChessboardCell(this.rowpos, this.colpos, {Key? key}) : super(key: key);
 
@@ -18,14 +19,12 @@ class _ChessboardCellState extends State<ChessboardCell> {
   Icon p2Icon = const Icon(Icons.clear);
   Icon? activeIcon;
 
-  bool isActive = false;
-
   void onUserClick(BuildContext context) {
-    if (isActive) return;
+    if (widget.isActive) return;
 
     final parentCbSt = Chessboard.of(context);
     if (parentCbSt != null) {
-      isActive = true;
+      widget.isActive = true;
       var player = parentCbSt.handleUserClick(widget.rowpos, widget.colpos);
       setState(() {
         // Player 1
@@ -48,8 +47,10 @@ class _ChessboardCellState extends State<ChessboardCell> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: widget.isMarked.value ? Colors.red : Colors.greenAccent,
-            border: Border.all(color: Colors.grey),
+            color: widget.isMarked.value
+                ? Colors.greenAccent[100]
+                : Colors.lime[50],
+            border: Border.all(color: Colors.grey.shade300),
           ),
           child: activeIcon,
         ),

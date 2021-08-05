@@ -13,14 +13,19 @@ class _GameplayRouteState extends State<GameplayRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Flutter Five In A Row"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            FlutterLogo(),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("Cờ carô phờ-lớt-tơ"),
+            )
+          ],
+        ),
         centerTitle: true,
       ),
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        alignment: Alignment.center,
-        child: const Chessboard(),
-      ),
+      body: const Center(child: Chessboard()),
     );
   }
 }
