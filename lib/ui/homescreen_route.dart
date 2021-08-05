@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gomoku/ui/gameplay_route.dart';
 import 'dart:math';
-
+import 'package:gomoku/globals.dart' as globals;
 import 'package:tuple/tuple.dart';
 
 class HomescreenRoute extends StatefulWidget {
@@ -12,8 +12,8 @@ class HomescreenRoute extends StatefulWidget {
 }
 
 class _HomescreenRouteState extends State<HomescreenRoute> {
-  double colNum = 1;
-  double rowNum = 1;
+  double inputColNum = 1;
+  double inputRowNum = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,9 @@ class _HomescreenRouteState extends State<HomescreenRoute> {
                 children: [
                   const Text("Columns: "),
                   Slider(
-                    label: colNum.round().toString(),
-                    value: colNum,
-                    onChanged: (double x) => setState(() => colNum = x),
+                    label: inputColNum.round().toString(),
+                    value: inputColNum,
+                    onChanged: (double x) => setState(() => inputColNum = x),
                     min: 1,
                     max: 20,
                     divisions: 19,
@@ -50,9 +50,9 @@ class _HomescreenRouteState extends State<HomescreenRoute> {
                 children: [
                   const Text("Rows: "),
                   Slider(
-                    label: rowNum.round().toString(),
-                    value: rowNum,
-                    onChanged: (double x) => setState(() => rowNum = x),
+                    label: inputRowNum.round().toString(),
+                    value: inputRowNum,
+                    onChanged: (double x) => setState(() => inputRowNum = x),
                     min: 1,
                     max: 20,
                     divisions: 19,
@@ -60,13 +60,16 @@ class _HomescreenRouteState extends State<HomescreenRoute> {
                 ],
               ),
               ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        GameplayRoute(Tuple2(rowNum.round(), colNum.round())),
-                  ),
-                ),
+                onPressed: () {
+                  globals.rowNum = inputRowNum.round();
+                  globals.colNum = inputColNum.round();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GameplayRoute(),
+                    ),
+                  );
+                },
                 child: const Text("Play!"),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 30),

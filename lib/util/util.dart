@@ -1,5 +1,5 @@
 import 'package:tuple/tuple.dart';
-import 'package:gomoku/util/player_enum.dart';
+import 'package:gomoku/util/enum.dart';
 
 class TurnMessenger {
   bool gameFinished;

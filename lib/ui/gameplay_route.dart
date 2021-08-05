@@ -3,8 +3,7 @@ import 'chessboard.dart';
 import 'package:tuple/tuple.dart';
 
 class GameplayRoute extends StatefulWidget {
-  Tuple2<int, int> cellNums;
-  GameplayRoute(this.cellNums, {Key? key}) : super(key: key);
+  GameplayRoute({Key? key}) : super(key: key);
 
   @override
   _GameplayRouteState createState() => _GameplayRouteState();
@@ -17,7 +16,7 @@ class _GameplayRouteState extends State<GameplayRoute> {
       appBar: AppBar(
         title: const Text("Game"),
       ),
-      body: Center(child: Chessboard(widget.cellNums)),
+      body: Center(child: Chessboard()),
     );
   }
 }

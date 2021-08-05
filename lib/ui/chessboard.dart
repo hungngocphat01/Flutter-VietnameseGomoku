@@ -2,14 +2,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'chessboard_cell.dart';
 import 'package:gomoku/util/util.dart';
-import 'package:gomoku/util/player_enum.dart';
+import 'package:gomoku/util/enum.dart';
 import 'package:gomoku/game_processor.dart';
 import 'package:tuple/tuple.dart';
+import 'package:gomoku/globals.dart' as globals;
 
 class Chessboard extends StatefulWidget {
-  Tuple2<int, int> cellNums;
-
-  Chessboard(this.cellNums, {Key? key}) : super(key: key);
+  Chessboard({Key? key}) : super(key: key);
 
   static _ChessboardState? of(BuildContext context) {
     final _ChessboardState? result =
@@ -22,16 +21,11 @@ class Chessboard extends StatefulWidget {
 }
 
 class _ChessboardState extends State<Chessboard> {
-  late int _rownum;
-  late int _colnum;
   late GameProcessor _processor;
   late ValueNotifier<Player> _currentPlayer;
   late List<Row> _boardRows;
   late BuildContext _context;
   late double _cellSize;
-
-  final Icon _p1Icon = const Icon(Icons.panorama_fisheye_sharp);
-  final Icon _p2Icon = const Icon(Icons.clear);
 
   double calculateCellSize(int cellnum, double dimension) {
     const minCellSize = 20;
@@ -47,9 +41,7 @@ class _ChessboardState extends State<Chessboard> {
 
   @override
   initState() {
-    _rownum = widget.cellNums.item1;
-    _colnum = widget.cellNums.item2;
-    _processor = GameProcessor(rowNum: _rownum, colNum: _colnum);
+    _processor = GameProcessor();
     _currentPlayer = ValueNotifier(Player.player1);
     super.initState();
   }
@@ -93,8 +85,10 @@ class _ChessboardState extends State<Chessboard> {
     try {
       _cellSize = min(
         min(
-          calculateCellSize(_rownum, MediaQuery.of(context).size.height - 20),
-          calculateCellSize(_colnum, MediaQuery.of(context).size.width - 20),
+          calculateCellSize(
+              globals.rowNum, MediaQuery.of(context).size.height - 20),
+          calculateCellSize(
+              globals.colNum, MediaQuery.of(context).size.width - 20),
         ),
         60,
       );
@@ -120,10 +114,10 @@ class _ChessboardState extends State<Chessboard> {
 
     // Construct a grid
     _boardRows = [];
-    for (int i = 0; i < _rownum; i++) {
+    for (int i = 0; i < globals.rowNum; i++) {
       // Construct columns for one row
       List<Widget> rowChildren = [];
-      for (int j = 0; j < _colnum; j++) {
+      for (int j = 0; j < globals.colNum; j++) {
         rowChildren.add(ChessboardCell(i, j, _cellSize));
       }
       _boardRows.add(Row(
@@ -138,7 +132,8 @@ class _ChessboardState extends State<Chessboard> {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
-              child: (player == Player.player1 ? _p1Icon : _p2Icon),
+              child:
+                  (player == Player.player1 ? globals.p1Icon : globals.p2Icon),
             ),
             Text(
               getPlayerName(player as Player),

@@ -1,6 +1,7 @@
 import 'package:gomoku/ui/chessboard.dart';
 import 'package:flutter/material.dart';
-import 'package:gomoku/util/player_enum.dart';
+import 'package:gomoku/util/enum.dart';
+import 'package:gomoku/globals.dart' as globals;
 
 class ChessboardCell extends StatefulWidget {
   final int _rowpos;
@@ -17,8 +18,6 @@ class ChessboardCell extends StatefulWidget {
 }
 
 class _ChessboardCellState extends State<ChessboardCell> {
-  final Icon _p1Icon = const Icon(Icons.panorama_fisheye_sharp);
-  final Icon _p2Icon = const Icon(Icons.clear);
   Icon? _activeIcon;
 
   void onUserClick(BuildContext context) {
@@ -31,9 +30,9 @@ class _ChessboardCellState extends State<ChessboardCell> {
       setState(() {
         // Player 1
         if (player == Player.player1) {
-          _activeIcon = _p1Icon;
+          _activeIcon = globals.p1Icon;
         } else {
-          _activeIcon = _p2Icon;
+          _activeIcon = globals.p2Icon;
         }
       });
     }
