@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'chessboard.dart';
+import 'game_board.dart';
 import 'package:tuple/tuple.dart';
 
 class GameplayRoute extends StatefulWidget {
@@ -16,7 +16,7 @@ class _GameplayRouteState extends State<GameplayRoute> {
       appBar: AppBar(
         title: const Text("Game"),
       ),
-      body: Center(child: Chessboard()),
+      body: Center(child: Gameboard()),
     );
   }
 }

@@ -1,26 +1,26 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'chessboard_cell.dart';
+import 'board_cell.dart';
 import 'package:gomoku/util/util.dart';
 import 'package:gomoku/util/enum.dart';
 import 'package:gomoku/game_processor.dart';
 import 'package:tuple/tuple.dart';
 import 'package:gomoku/globals.dart' as globals;
 
-class Chessboard extends StatefulWidget {
-  Chessboard({Key? key}) : super(key: key);
+class Gameboard extends StatefulWidget {
+  Gameboard({Key? key}) : super(key: key);
 
-  static _ChessboardState? of(BuildContext context) {
-    final _ChessboardState? result =
-        context.findAncestorStateOfType<_ChessboardState>();
+  static _GameboardState? of(BuildContext context) {
+    final _GameboardState? result =
+        context.findAncestorStateOfType<_GameboardState>();
     return result;
   }
 
   @override
-  _ChessboardState createState() => _ChessboardState();
+  _GameboardState createState() => _GameboardState();
 }
 
-class _ChessboardState extends State<Chessboard> {
+class _GameboardState extends State<Gameboard> {
   late GameProcessor _processor;
   late ValueNotifier<Player> _currentPlayer;
   late List<Row> _boardRows;
@@ -56,14 +56,13 @@ class _ChessboardState extends State<Chessboard> {
       debugPrint("Victory: ${getPlayerName(messenger.currentPlayer)}");
       // Mark combo cells
       messenger.markedCells?.forEach((c) {
-        (_boardRows[c.item1].children[c.item2] as ChessboardCell)
-            .isMarked
-            .value = true;
+        (_boardRows[c.item1].children[c.item2] as BoardCell).isMarked.value =
+            true;
       });
       // Disable input
       for (Row row in _boardRows) {
         for (Widget c in row.children) {
-          (c as ChessboardCell).isActive = true;
+          (c as BoardCell).isActive = true;
         }
       }
       // Show a snackbar
@@ -118,7 +117,7 @@ class _ChessboardState extends State<Chessboard> {
       // Construct columns for one row
       List<Widget> rowChildren = [];
       for (int j = 0; j < globals.colNum; j++) {
-        rowChildren.add(ChessboardCell(i, j, _cellSize));
+        rowChildren.add(BoardCell(i, j, _cellSize));
       }
       _boardRows.add(Row(
         children: rowChildren,

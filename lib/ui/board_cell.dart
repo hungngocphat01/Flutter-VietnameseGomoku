@@ -1,29 +1,29 @@
-import 'package:gomoku/ui/chessboard.dart';
+import 'package:gomoku/ui/game_board.dart';
 import 'package:flutter/material.dart';
 import 'package:gomoku/util/enum.dart';
 import 'package:gomoku/globals.dart' as globals;
 
-class ChessboardCell extends StatefulWidget {
+class BoardCell extends StatefulWidget {
   final int _rowpos;
   final int _colpos;
   final double _size;
   var isMarked = ValueNotifier<bool>(false);
   bool isActive = false;
 
-  ChessboardCell(this._rowpos, this._colpos, this._size, {Key? key})
+  BoardCell(this._rowpos, this._colpos, this._size, {Key? key})
       : super(key: key);
 
   @override
-  _ChessboardCellState createState() => _ChessboardCellState();
+  _BoardCellState createState() => _BoardCellState();
 }
 
-class _ChessboardCellState extends State<ChessboardCell> {
+class _BoardCellState extends State<BoardCell> {
   Icon? _activeIcon;
 
   void onUserClick(BuildContext context) {
     if (widget.isActive) return;
 
-    final parentCbSt = Chessboard.of(context);
+    final parentCbSt = Gameboard.of(context);
     if (parentCbSt != null) {
       widget.isActive = true;
       var player = parentCbSt.handleUserClick(widget._rowpos, widget._colpos);

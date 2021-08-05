@@ -11,23 +11,24 @@ I'm not too familiar with design patterns, so I made up this structure without a
 ![class-diagram](extra/ClassDiagram.jpg)
 
 # Implementation note
-## UI Preparation 
-1. `_GameplayRouteState`'s build method is called.
-2. It returns a `Chessboard`. A `_ChessboardState` instance is created inside `Chessboard`. (`rownum`, `colnum` should be passed).
-3. The `_ChessboardState`'s build method is called. It then initializes a grid of `ChessboardCell`s (`rowpos`, `colpos` should be passed).
-4. The `ChessboardCell`s are created and drawn onto the UI.
+# Program flow
+1. `main()` initializes a `MaterialApp` object, which then creates a `HomescreenRoute`, eventually becoming the home widget.
+2. `HomescreenRoute` asks the user to specify dimensions for the game board. The results are saved to the `globals` library.
+3. After the "Play" button is clicked, a new `GameplayRoute` is created and laid out to the UI.
+4. `GameplayRoute`'s build method returns a `Scaffold`, whose body is an instance of `GameBoard`.
+5. `-GameboardState` reads the board dimensions from `globals` and initalizes a grid of `BoardCell`s accordingly. If the cells are too small to be playable, an exception will be raised and the program will return back to `HomescreenRoute`.
 
-## Handling user click on the `ChessboardCell`s
-The `build` method of `_ChessboardCellState` returns a `GestureDetector`, whose `onTap` property points to the `_ChessboardCellState.onUserClick` function.
-1. When user clicks on `ChessboardCell`, `_ChessboardCellState.onUserClick()` method is invoked.
-2. The method searchs for the nearest (and only) `_ChessboardState` up in the widget tree.
-3. The method calls the `_ChessboardState.handleUserClick(int, int)` method from its parent.
-4. The parent `_ChessboardState` now has received the call from its child. Now it should notify the caller the current player of the game (player 1 or player 2) ("passed" through its return value).
-5. The calling `_ChessboardCellState` now knows which player is playing and it should lock its state to prevent further changes, as well as displaying an `O` or `X` mark accordingly to the current player.
+## Handling user click on the `BoardCell`s
+The `build` method of `_BoardCellState` returns a `GestureDetector`, whose `onTap` property points to the `_BoardCellState.onUserClick` function.
+1. When user clicks on `BoardCell`, `_BoardCellState.onUserClick()` method is invoked.
+2. The method searchs for the nearest (and only) `_GameboardState` up in the widget tree.
+3. The method calls the `_GameboardState.handleUserClick(int, int)` method from its parent.
+4. The parent `_GameboardState` now has received the call from its child. Now it should notify the caller the current player of the game (player 1 or player 2) ("passed" through its return value).
+5. The calling `_BoardCellState` now knows which player is playing and it should lock its state to prevent further changes, as well as displaying an `O` or `X` mark accordingly to the current player.
 
-6. `_ChessboardState` passes the location of the just clicked cell in the chessboard to `GameProcessor`.
+6. `_GameboardState` passes the location of the just clicked cell in the Gameboard to `GameProcessor`.
 7. `GameProcessor` should process the incoming information and returns a `TurnMessenger` object.
-8. `_ChessboardState` receives the response from `GameProcessor` and should whether decide to do the following things if the game has finished:
-    - Lock the chessboard.
+8. `_GameboardState` receives the response from `GameProcessor` and should whether decide to do the following things if the game has finished:
+    - Lock the Gameboard.
     - Mark the cells.
     - Show the winner's name.
