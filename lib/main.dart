@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gomoku/ui/gameplay_route.dart';
+import 'package:gomoku/ui/homescreen_route.dart';
 
 void main() {
   runApp(
-    const MaterialApp(home: GameplayRoute()),
+    const MaterialApp(
+      title: "Cờ carô",
+      home: HomescreenRoute(),
+    ),
   );
 }
+
+// TODO: refactor code

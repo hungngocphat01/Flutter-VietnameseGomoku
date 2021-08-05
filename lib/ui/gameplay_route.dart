@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'chessboard.dart';
+import 'package:tuple/tuple.dart';
 
 class GameplayRoute extends StatefulWidget {
-  const GameplayRoute({Key? key}) : super(key: key);
+  Tuple2<int, int> cellNums;
+  GameplayRoute(this.cellNums, {Key? key}) : super(key: key);
 
   @override
   _GameplayRouteState createState() => _GameplayRouteState();
@@ -13,19 +15,9 @@ class _GameplayRouteState extends State<GameplayRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            FlutterLogo(),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text("Cờ carô phờ-lớt-tơ"),
-            )
-          ],
-        ),
-        centerTitle: true,
+        title: const Text("Game"),
       ),
-      body: const Center(child: Chessboard()),
+      body: Center(child: Chessboard(widget.cellNums)),
     );
   }
 }
