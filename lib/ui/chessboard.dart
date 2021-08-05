@@ -32,11 +32,14 @@ class _ChessboardState extends State<Chessboard> {
   }
 
   Player handleUserClick(int row, int col) {
-    currentPlayer = playerNegate(currentPlayer);
-
     TurnMessenger messenger = processor.handleUserMark(row, col, currentPlayer);
     // TODO: Process information returned by processor
-    return currentPlayer;
+    if (messenger.gameFinished) {
+      debugPrint("Game end");
+      debugPrint("Victory: ${messenger.currentPlayer}");
+    }
+    currentPlayer = playerNegate(currentPlayer);
+    return messenger.currentPlayer;
   }
 
   @override
