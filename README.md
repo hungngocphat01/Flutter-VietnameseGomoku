@@ -13,7 +13,7 @@ I'm not too familiar with design patterns, so I made up this structure without a
 ![class-diagram](extra/ClassDiagram.jpg)
 
 # Implementation note
-# Program flow
+## Initialization flow
 1. `main()` first instantiates a `Provider`, which holds a `BoardSize` object. This `Provider` also encloses a `MaterialApp`, whose `body` is set to an instance of `HomescreenRoute`.
 2. `HomescreenRoute` is built and asks the user to specify the dimensions for the game board. The results are stored in top-level `Provider`.
 3. When user taps the `Play` button, the app switches to `GameplayRoute`, whose `build()` method instantiates a `Gameboard`.
