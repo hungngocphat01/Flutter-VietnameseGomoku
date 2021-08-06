@@ -7,8 +7,6 @@ class BoardCell extends StatefulWidget {
   final int _rowpos;
   final int _colpos;
   final double _size;
-  var isMarked = ValueNotifier<bool>(false);
-  bool isActive = false;
 
   BoardCell(this._rowpos, this._colpos, this._size, {Key? key})
       : super(key: key);
@@ -19,14 +17,51 @@ class BoardCell extends StatefulWidget {
 
 class _BoardCellState extends State<BoardCell> {
   Icon? _activeIcon;
+  bool _isMarked = false;
+  bool _isDisabled = false;
+  bool _isInitialized = false;
 
-  void onUserClick(BuildContext context) {
-    if (widget.isActive) return;
+  invokeMarked() {
+    setState(() {
+      _isMarked = true;
+    });
+  }
 
-    final parentCbSt = Gameboard.of(context);
-    if (parentCbSt != null) {
-      widget.isActive = true;
-      var player = parentCbSt.handleUserClick(widget._rowpos, widget._colpos);
+  invokeActive() {
+    setState(() {
+      _isDisabled = true;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isInitialized) {
+      return;
+    }
+
+    var parentGmbState = Gameboard.of(context);
+    if (parentGmbState != null) {
+      parentGmbState.boardCellsStateManager[widget._rowpos][widget._colpos]
+          .markThisCell = invokeMarked;
+      parentGmbState.boardCellsStateManager[widget._rowpos][widget._colpos]
+          .disableCell = invokeActive;
+    } else {
+      throw Exception(
+          "Cell (${widget._rowpos}, ${widget._colpos}): parent Gameboard was null.");
+    }
+
+    _isInitialized = true;
+  }
+
+  void _onUserClick(BuildContext context) {
+    if (_isDisabled) return;
+
+    final parentGmbState = Gameboard.of(context);
+    if (parentGmbState != null) {
+      _isDisabled = true;
+      var player =
+          parentGmbState.handleUserClick(widget._rowpos, widget._colpos);
       setState(() {
         // Player 1
         if (player == Player.player1) {
@@ -35,26 +70,24 @@ class _BoardCellState extends State<BoardCell> {
           _activeIcon = globals.p2Icon;
         }
       });
+    } else {
+      throw Exception(
+          "Cell (${widget._rowpos}, ${widget._colpos}): parent Gameboard was null.");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onUserClick(context),
-      child: ValueListenableBuilder(
-        valueListenable: widget.isMarked,
-        builder: (context, value, child) => Container(
-          width: widget._size,
-          height: widget._size,
-          decoration: BoxDecoration(
-            color: widget.isMarked.value
-                ? Colors.greenAccent[100]
-                : Colors.lime[50],
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          child: _activeIcon,
+      onTap: () => _onUserClick(context),
+      child: Container(
+        width: widget._size,
+        height: widget._size,
+        decoration: BoxDecoration(
+          color: _isMarked ? Colors.greenAccent[100] : Colors.lime[50],
+          border: Border.all(color: Colors.grey.shade300),
         ),
+        child: _activeIcon,
       ),
     );
   }

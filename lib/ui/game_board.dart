@@ -21,9 +21,13 @@ class Gameboard extends StatefulWidget {
 }
 
 class _GameboardState extends State<Gameboard> {
+  // To update the player label automatically
   final ValueNotifier<Player> _currentPlayer = ValueNotifier(Player.player1);
   late GameProcessor _processor;
+  // The board cell widgets
   late List<Row> _boardRows;
+  // The functions exposed by the board cell widgets
+  late List<List<CellStateManager>> boardCellsStateManager;
   late BuildContext _context;
   late double _cellSize;
   late BoardSize _boardsize;
@@ -44,12 +48,20 @@ class _GameboardState extends State<Gameboard> {
   @override
   didChangeDependencies() {
     super.didChangeDependencies();
+    // Check if state is initialized before
     if (stateInitialized) {
       return;
     }
+    // Get board size from provider
     _boardsize = Provider.of<BoardSize>(context);
+    // Initialize processor
     _processor = GameProcessor(_boardsize.getHeight(), _boardsize.getWidth());
     _context = context;
+    // Allocate 2D list of state managers (to be exposed later)
+    boardCellsStateManager = List.generate(
+      _boardsize.getHeight(),
+      (i) => List.generate(_boardsize.getWidth(), (j) => CellStateManager()),
+    );
     stateInitialized = true;
   }
 
@@ -63,13 +75,12 @@ class _GameboardState extends State<Gameboard> {
       debugPrint("Victory: ${getPlayerName(messenger.currentPlayer)}");
       // Mark combo cells
       messenger.markedCells?.forEach((c) {
-        (_boardRows[c.item1].children[c.item2] as BoardCell).isMarked.value =
-            true;
+        boardCellsStateManager[c.item1][c.item2].markThisCell();
       });
       // Disable input
-      for (Row row in _boardRows) {
-        for (Widget c in row.children) {
-          (c as BoardCell).isActive = true;
+      for (int i = 0; i < _boardsize.getHeight(); i++) {
+        for (int j = 0; j < _boardsize.getWidth(); j++) {
+          boardCellsStateManager[i][j].disableCell();
         }
       }
       // Show a snackbar
@@ -154,9 +165,10 @@ class _GameboardState extends State<Gameboard> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ValueListenableBuilder(
-                  valueListenable: _currentPlayer,
-                  builder: (context, player, widget) =>
-                      buildPlayerName(context, player, widget)),
+                valueListenable: _currentPlayer,
+                builder: (context, player, widget) =>
+                    buildPlayerName(context, player, widget),
+              ),
             )
           ] +
           _boardRows,
