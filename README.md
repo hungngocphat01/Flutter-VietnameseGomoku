@@ -21,8 +21,7 @@ I'm not too familiar with design patterns, so I made up this structure without a
 5. `_GameboardState` fetches the `BoardSize` value from the top-level `Provider` and instantiate a `GameProcessor`, along with other crucial variables.
 6. The `build()` method of `_GameboardState` is called, calculating the size of `BoardCell`s accordingly to the received `BoardSize`. If the size is too small to be playable, a warning message will be returned, and the user will be redirected to the homescreen.
 7. If the app passed the previous step, a grid of `BoardCell`s will be created.
-8. Upon their initialization process, the cells will expose their `invokeMarked()` and `invokeActive()` functions to the parent `Gameboard`. These functions are neccessary to change the `BoardCell`s' state individually when the game finishes. 
-9. The `build()` method of `_BoardCellState` returns a `GestureDetector`.
+8. The `build()` method of `_BoardCellState` returns a `GestureDetector`.
 
 
 <!-- 1. `main()` initializes a `MaterialApp` object, which then creates a `HomescreenRoute`, eventually becoming the home widget.

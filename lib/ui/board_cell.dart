@@ -12,10 +12,10 @@ class BoardCell extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BoardCellState createState() => _BoardCellState();
+  BoardCellState createState() => BoardCellState();
 }
 
-class _BoardCellState extends State<BoardCell> {
+class BoardCellState extends State<BoardCell> {
   Icon? _activeIcon;
   bool _isMarked = false;
   bool _isDisabled = false;
@@ -31,27 +31,6 @@ class _BoardCellState extends State<BoardCell> {
     setState(() {
       _isDisabled = true;
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isInitialized) {
-      return;
-    }
-
-    var parentGmbState = Gameboard.of(context);
-    if (parentGmbState != null) {
-      parentGmbState.boardCellsStateManager[widget._rowpos][widget._colpos]
-          .markThisCell = invokeMarked;
-      parentGmbState.boardCellsStateManager[widget._rowpos][widget._colpos]
-          .disableCell = invokeActive;
-    } else {
-      throw Exception(
-          "Cell (${widget._rowpos}, ${widget._colpos}): parent Gameboard was null.");
-    }
-
-    _isInitialized = true;
   }
 
   void _onUserClick(BuildContext context) {

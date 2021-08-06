@@ -27,7 +27,7 @@ class _GameboardState extends State<Gameboard> {
   // The board cell widgets
   late List<Row> _boardRows;
   // The functions exposed by the board cell widgets
-  late List<List<CellStateManager>> boardCellsStateManager;
+  late List<List<GlobalKey<BoardCellState>?>> boardCellKeys;
   late BuildContext _context;
   late double _cellSize;
   late BoardSize _boardsize;
@@ -58,9 +58,9 @@ class _GameboardState extends State<Gameboard> {
     _processor = GameProcessor(_boardsize.getHeight(), _boardsize.getWidth());
     _context = context;
     // Allocate 2D list of state managers (to be exposed later)
-    boardCellsStateManager = List.generate(
+    boardCellKeys = List.generate(
       _boardsize.getHeight(),
-      (i) => List.generate(_boardsize.getWidth(), (j) => CellStateManager()),
+      (i) => List.generate(_boardsize.getWidth(), (j) => null),
     );
     stateInitialized = true;
   }
@@ -75,12 +75,12 @@ class _GameboardState extends State<Gameboard> {
       debugPrint("Victory: ${getPlayerName(messenger.currentPlayer)}");
       // Mark combo cells
       messenger.markedCells?.forEach((c) {
-        boardCellsStateManager[c.item1][c.item2].markThisCell();
+        boardCellKeys[c.item1][c.item2]!.currentState!.invokeMarked();
       });
       // Disable input
       for (int i = 0; i < _boardsize.getHeight(); i++) {
         for (int j = 0; j < _boardsize.getWidth(); j++) {
-          boardCellsStateManager[i][j].disableCell();
+          boardCellKeys[i][j]!.currentState!.invokeActive();
         }
       }
       // Show a snackbar
@@ -134,7 +134,9 @@ class _GameboardState extends State<Gameboard> {
       // Construct columns for one row
       List<Widget> rowChildren = [];
       for (int j = 0; j < _boardsize.width; j++) {
-        rowChildren.add(BoardCell(i, j, _cellSize));
+        final key = GlobalKey<BoardCellState>();
+        rowChildren.add(BoardCell(i, j, _cellSize, key: key));
+        boardCellKeys[i][j] = key;
       }
       _boardRows.add(Row(
         children: rowChildren,
