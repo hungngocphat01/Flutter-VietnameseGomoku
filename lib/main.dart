@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gomoku/ui/homescreen_route.dart';
+import 'package:provider/provider.dart';
+import 'util/util.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
-      title: "Cờ carô",
-      home: HomescreenRoute(),
+    Provider(
+      create: (context) => BoardSize(),
+      builder: (context, widget) => const MaterialApp(
+        title: "Cờ carô",
+        home: HomescreenRoute(),
+      ),
     ),
   );
 }

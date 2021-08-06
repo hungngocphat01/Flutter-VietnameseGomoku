@@ -5,5 +5,5 @@ import 'util/enum.dart';
 
 int colNum = 0;
 int rowNum = 0;
-Icon p1Icon = const Icon(Icons.panorama_fisheye_sharp);
-Icon p2Icon = const Icon(Icons.clear);
+const Icon p1Icon = Icon(Icons.panorama_fisheye_sharp);
+const Icon p2Icon = Icon(Icons.clear);

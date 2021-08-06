@@ -12,3 +12,11 @@ class TurnMessenger {
     required this.currentPlayer,
   });
 }
+
+class BoardSize {
+  double width = 1;
+  double height = 1;
+
+  getWidth() => width.round();
+  getHeight() => height.round();
+}

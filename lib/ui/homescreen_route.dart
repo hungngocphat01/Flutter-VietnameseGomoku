@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gomoku/ui/gameplay_route.dart';
+import 'package:gomoku/util/util.dart';
 import 'dart:math';
-import 'package:gomoku/globals.dart' as globals;
-import 'package:tuple/tuple.dart';
+import 'package:provider/provider.dart';
 
 class HomescreenRoute extends StatefulWidget {
   const HomescreenRoute({Key? key}) : super(key: key);
@@ -12,11 +12,10 @@ class HomescreenRoute extends StatefulWidget {
 }
 
 class _HomescreenRouteState extends State<HomescreenRoute> {
-  double inputColNum = 1;
-  double inputRowNum = 1;
-
   @override
   Widget build(BuildContext context) {
+    var screendim = Provider.of<BoardSize>(context);
+
     return Scaffold(
       body: Center(
         child: SizedBox(
@@ -36,9 +35,10 @@ class _HomescreenRouteState extends State<HomescreenRoute> {
                 children: [
                   const Text("Columns: "),
                   Slider(
-                    label: inputColNum.round().toString(),
-                    value: inputColNum,
-                    onChanged: (double x) => setState(() => inputColNum = x),
+                    label: screendim.getWidth().toString(),
+                    value: screendim.width,
+                    onChanged: (double x) =>
+                        setState(() => screendim.width = x),
                     min: 1,
                     max: 20,
                     divisions: 19,
@@ -50,9 +50,10 @@ class _HomescreenRouteState extends State<HomescreenRoute> {
                 children: [
                   const Text("Rows: "),
                   Slider(
-                    label: inputRowNum.round().toString(),
-                    value: inputRowNum,
-                    onChanged: (double x) => setState(() => inputRowNum = x),
+                    label: screendim.getHeight().toString(),
+                    value: screendim.height,
+                    onChanged: (double x) =>
+                        setState(() => screendim.height = x),
                     min: 1,
                     max: 20,
                     divisions: 19,
@@ -61,8 +62,6 @@ class _HomescreenRouteState extends State<HomescreenRoute> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  globals.rowNum = inputRowNum.round();
-                  globals.colNum = inputColNum.round();
                   Navigator.push(
                     context,
                     MaterialPageRoute(

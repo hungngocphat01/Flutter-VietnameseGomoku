@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:gomoku/util/util.dart';
 import 'package:gomoku/util/enum.dart';
-import 'package:gomoku/globals.dart' as globals;
 
 class GameProcessor {
   late Player currentPlayer;
   late List<List<Player?>> boardData;
+  final int colNum;
+  final int rowNum;
 
-  GameProcessor() {
-    boardData = List.generate(
-        globals.rowNum, (i) => List.generate(globals.colNum, (j) => null));
+  GameProcessor(this.rowNum, this.colNum) {
+    boardData =
+        List.generate(rowNum, (i) => List.generate(colNum, (j) => null));
   }
 
   bool _rowInvalid(int row) {
-    return (row < 0 || row >= globals.rowNum);
+    return (row < 0 || row >= rowNum);
   }
 
   bool _colInvalid(int col) {
-    return (col < 0 || col >= globals.colNum);
+    return (col < 0 || col >= colNum);
   }
 
   List<Coordinate> _countStraight(int row, int col, Direction d) {

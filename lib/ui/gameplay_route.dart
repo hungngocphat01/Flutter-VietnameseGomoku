@@ -3,7 +3,7 @@ import 'game_board.dart';
 import 'package:tuple/tuple.dart';
 
 class GameplayRoute extends StatefulWidget {
-  GameplayRoute({Key? key}) : super(key: key);
+  const GameplayRoute({Key? key}) : super(key: key);
 
   @override
   _GameplayRouteState createState() => _GameplayRouteState();

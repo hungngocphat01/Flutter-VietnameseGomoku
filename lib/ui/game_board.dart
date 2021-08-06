@@ -4,11 +4,11 @@ import 'board_cell.dart';
 import 'package:gomoku/util/util.dart';
 import 'package:gomoku/util/enum.dart';
 import 'package:gomoku/game_processor.dart';
-import 'package:tuple/tuple.dart';
+import 'package:provider/provider.dart';
 import 'package:gomoku/globals.dart' as globals;
 
 class Gameboard extends StatefulWidget {
-  Gameboard({Key? key}) : super(key: key);
+  const Gameboard({Key? key}) : super(key: key);
 
   static _GameboardState? of(BuildContext context) {
     final _GameboardState? result =
@@ -21,11 +21,13 @@ class Gameboard extends StatefulWidget {
 }
 
 class _GameboardState extends State<Gameboard> {
+  final ValueNotifier<Player> _currentPlayer = ValueNotifier(Player.player1);
   late GameProcessor _processor;
-  late ValueNotifier<Player> _currentPlayer;
   late List<Row> _boardRows;
   late BuildContext _context;
   late double _cellSize;
+  late BoardSize _boardsize;
+  bool stateInitialized = false;
 
   double calculateCellSize(int cellnum, double dimension) {
     const minCellSize = 20;
@@ -40,10 +42,15 @@ class _GameboardState extends State<Gameboard> {
       p == Player.player1 ? "Player 1" : "Player 2";
 
   @override
-  initState() {
-    _processor = GameProcessor();
-    _currentPlayer = ValueNotifier(Player.player1);
-    super.initState();
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    if (stateInitialized) {
+      return;
+    }
+    _boardsize = Provider.of<BoardSize>(context);
+    _processor = GameProcessor(_boardsize.getHeight(), _boardsize.getWidth());
+    _context = context;
+    stateInitialized = true;
   }
 
   Player handleUserClick(int row, int col) {
@@ -79,15 +86,14 @@ class _GameboardState extends State<Gameboard> {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     // Try to determine the size of each cells
     try {
       _cellSize = min(
         min(
           calculateCellSize(
-              globals.rowNum, MediaQuery.of(context).size.height - 20),
+              _boardsize.getHeight(), MediaQuery.of(context).size.height - 20),
           calculateCellSize(
-              globals.colNum, MediaQuery.of(context).size.width - 20),
+              _boardsize.getWidth(), MediaQuery.of(context).size.width - 20),
         ),
         60,
       );
@@ -113,10 +119,10 @@ class _GameboardState extends State<Gameboard> {
 
     // Construct a grid
     _boardRows = [];
-    for (int i = 0; i < globals.rowNum; i++) {
+    for (int i = 0; i < _boardsize.height; i++) {
       // Construct columns for one row
       List<Widget> rowChildren = [];
-      for (int j = 0; j < globals.colNum; j++) {
+      for (int j = 0; j < _boardsize.width; j++) {
         rowChildren.add(BoardCell(i, j, _cellSize));
       }
       _boardRows.add(Row(
